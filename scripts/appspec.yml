@@ -1,0 +1,26 @@
+version: 0.0
+os: linux
+files:
+  - source: /app
+    destination: /var/www/html
+permissions:
+  - object: /
+    pattern: "***"
+    owner: root
+    group: root
+hooks:
+  ApplicationStop:
+    - location: scripts/stop_application
+      timeout: 120
+      runas: root
+  BeforeInstall:
+    - location: scripts/install_dependencies
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: scripts/start_application
+      timeout: 300
+      runas: root
+  ValidateService:
+    - location: scripts/basic_health_check.sh
+      runas: root
